@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import './style.css';
 
 export default function App() {
-  const guessArray = [];
   const [submitDisabled, setSubmitDisabled] = useState(false);
   const [startDisabled, setStartDisabled] = useState(true);
   const [inputValue, setInputValue] = useState('');
   const computerGuess = Math.round(Math.random() * 100);
-  let showGuessArrayMessage = '';
-  let resultMesage = '';
+  const [guessArray, setGuessArray] = useState([]);
+  const [resultMesage, setResultMesage] = useState('');
+  const [guessMessage, setGuessMessage] = useState('');
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
@@ -18,26 +18,37 @@ export default function App() {
   function onSubmit(e) {
     e.preventDefault();
     const guess = +inputValue;
-    setInputValue('');
-    guessArray.push(guess);
-    showGuessArrayMessage = `Your guesses: ${guessArray.join(', ')}`;
+    // setGuessArray((guessArray) => [...guessArray, guess]);
+    const newArray = [...guessArray, guess];
+    setGuessArray(newArray);
+    // showGuessArrayMessage = `Your guesses: ${guessArray.join(', ')}`;
+    setGuessMessage(`Your guesses: ${guessArray}`);
 
-    console.log(showGuessArrayMessage, 'showGuessArrayMessage');
+    console.log('guessArray', guessArray);
+    console.log(guessMessage, 'guessMessage');
     console.log(computerGuess, 'computerGuess');
     console.log(guess, 'guess');
 
     if (guess > computerGuess) {
-      resultMesage = 'Too high!';
+      setResultMesage('Too high!');
     } else if (guess < computerGuess) {
-      resultMesage = 'Too low!';
+      setResultMesage('Too low!');
     } else {
-      resultMesage = 'You got it! Congrats';
+      setResultMesage('You got it! Congrats');
       return;
     }
 
     if (guessArray.length >= 10) {
-      resultMesage = 'You lost! The number was ' + computerGuess;
+      setResultMesage('You lost! The number was ' + computerGuess);
+      setSubmitDisabled(true);
+      setStartDisabled(false);
     }
+    setInputValue('');
+  }
+
+  function onStart() {
+    setSubmitDisabled(false);
+    setStartDisabled(true);
   }
 
   return (
@@ -73,14 +84,15 @@ export default function App() {
             type="button"
             id="start"
             className="btn btn-primary"
-            disabled={true}
+            disabled={startDisabled}
+            onClick={onStart}
           >
             Start Game
           </button>
           <br />
           {resultMesage}
           <br />
-          {showGuessArrayMessage}
+          {guessMessage}
         </div>
       </form>
     </div>
