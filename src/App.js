@@ -14,20 +14,12 @@ export default function App() {
     setInputValue(event.target.value);
   };
 
-  // to be checked
   function onSubmit(e) {
     e.preventDefault();
     const guess = +inputValue;
-    // setGuessArray((guessArray) => [...guessArray, guess]);
     const newArray = [...guessArray, guess];
     setGuessArray(newArray);
-    // showGuessArrayMessage = `Your guesses: ${guessArray.join(', ')}`;
-    setGuessMessage(`Your guesses: ${guessArray}`);
-
-    console.log('guessArray', guessArray);
-    console.log(guessMessage, 'guessMessage');
-    console.log(computerGuess, 'computerGuess');
-    console.log(guess, 'guess');
+    setGuessMessage(`Your guesses: ${newArray}`);
 
     if (guess > computerGuess) {
       setResultMesage('Too high!');
@@ -66,6 +58,7 @@ export default function App() {
           placeholder="Enter a number"
           autoComplete="off"
           onChange={handleInputChange}
+          value={inputValue}
         />
 
         <div className="buttons">
